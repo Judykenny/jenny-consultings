@@ -37,6 +37,22 @@
   }
   a{ color: inherit; }
 
+  nav.site-nav{
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 22px 24px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  nav.site-nav .brand{ color: var(--paper); font-family: var(--display); text-transform: none; font-size: 15px; text-decoration: none; }
+  nav.site-nav .links a{ color: var(--paper-dim); text-decoration: none; margin-left: 22px; }
+  nav.site-nav .links a:hover{ color: var(--amber); }
+
   .wrap{ max-width: 880px; margin: 0 auto; padding: 0 24px 80px; }
 
   header.board-header{ padding: 56px 0 28px; border-bottom: 1px solid var(--line); }
@@ -157,6 +173,14 @@
 </head>
 <body>
 
+<nav class="site-nav">
+  <a class="brand" href="index.html">Jenny Consultings</a>
+  <span class="links">
+    <a href="index.html">Vacancies</a>
+    <a href="about.html">About</a>
+  </span>
+</nav>
+
 <div class="wrap">
 
   <header class="board-header">
@@ -175,7 +199,7 @@
 
   <footer>
     <span>© <span id="year"></span> Jenny Consultings</span>
-    <a href="mailto:careers@jennyconsultings.com">careers@jennyconsultings.com</a>
+    <a href="mailto:judith@jennyconsultings.com">judith@jennyconsultings.com</a>
   </footer>
 
 </div>
@@ -243,7 +267,7 @@
         "Continuing education stipend and paid mentorship hours",
         "401(k) with employer match"
       ],
-      applyLink: "mailto:careers@jennyconsultings.com?subject=Application: PT-102 Physical Therapist, Bakersfield CA"
+      applyLink: "mailto:judith@jennyconsultings.com?subject=Application: PT-102 Physical Therapist, Bakersfield CA"
     },
     {
       id: "PT-103",
@@ -268,7 +292,7 @@
         "Continuing education reimbursement",
         "401(k) with employer contribution"
       ],
-      applyLink: "mailto:careers@jennyconsultings.com?subject=Application: PT-103 Physical Therapist, Fresno CA"
+      applyLink: "mailto:judith@jennyconsultings.com?subject=Application: PT-103 Physical Therapist, Fresno CA"
     },
     {
       id: "PT-104",
@@ -292,7 +316,7 @@
         "$1,000/year continuing education reimbursement",
         "401(k) with employer match"
       ],
-      applyLink: "mailto:careers@jennyconsultings.com?subject=Application: PT-104 Physical Therapist, Savannah GA"
+      applyLink: "mailto:judith@jennyconsultings.com?subject=Application: PT-104 Physical Therapist, Savannah GA"
     },
     {
       id: "PT-105",
@@ -316,7 +340,7 @@
         "Continuing education reimbursement",
         "401(k) available after eligibility period"
       ],
-      applyLink: "mailto:careers@jennyconsultings.com?subject=Application: PT-105 Physical Therapist, Macon GA"
+      applyLink: "mailto:judith@jennyconsultings.com?subject=Application: PT-105 Physical Therapist, Macon GA"
     },
     {
       id: "PT-106",
@@ -341,7 +365,7 @@
         "Continuing education reimbursement",
         "401(k) with employer contribution"
       ],
-      applyLink: "mailto:careers@jennyconsultings.com?subject=Application: PT-106 Physical Therapist, Augusta GA"
+      applyLink: "mailto:judith@jennyconsultings.com?subject=Application: PT-106 Physical Therapist, Augusta GA"
     }
   ];
 
