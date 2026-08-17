@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Physical Therapist Openings — Jenny Consultings</title>
+<meta name="description" content="Onsite Physical Therapist openings across California and Georgia.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:        #14181F;
+    --line:       #2A313D;
+    --paper:      #F6F5F1;
+    --paper-dim:  #A6ACB8;
+    --amber:      #E8A33D;
+    --amber-dim:  #7A5A26;
+    --teal:       #2E8577;
+    --slate:      #6B7280;
+
+    --display: 'Space Grotesk', sans-serif;
+    --body:    'Inter', sans-serif;
+    --mono:    'JetBrains Mono', monospace;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin:0;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--body);
+    -webkit-font-smoothing: antialiased;
+  }
+  a{ color: inherit; }
+
+  .wrap{ max-width: 880px; margin: 0 auto; padding: 0 24px 80px; }
+
+  header.board-header{ padding: 56px 0 28px; border-bottom: 1px solid var(--line); }
+  .eyebrow{
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--amber); margin: 0 0 10px;
+  }
+  h1.org-name{
+    font-family: var(--display); font-weight: 700;
+    font-size: clamp(30px, 5vw, 44px); line-height: 1.05;
+    margin: 0 0 10px; letter-spacing: -0.01em;
+  }
+  p.tagline{ font-size: 16px; color: var(--paper-dim); max-width: 50ch; margin: 0; }
+  .meta-row{
+    display:flex; gap: 20px; flex-wrap: wrap; margin-top: 22px;
+    font-family: var(--mono); font-size: 12px; color: var(--paper-dim);
+  }
+  .meta-row span b{ color: var(--paper); font-weight: 500; }
+
+  .filters{ display:flex; gap: 8px; flex-wrap: wrap; margin: 28px 0 4px; }
+  .filter-btn{
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em;
+    text-transform: uppercase; background: transparent; border: 1px solid var(--line);
+    color: var(--paper-dim); padding: 9px 14px; border-radius: 999px; cursor: pointer;
+    transition: border-color .15s ease, color .15s ease, background .15s ease;
+  }
+  .filter-btn:hover{ border-color: var(--paper-dim); color: var(--paper); }
+  .filter-btn.active{ background: var(--paper); color: var(--ink); border-color: var(--paper); }
+  .filter-btn:focus-visible{ outline: 2px solid var(--amber); outline-offset: 2px; }
+
+  .board{ margin-top: 18px; border-top: 1px solid var(--line); }
+  .row{ border-bottom: 1px solid var(--line); padding: 18px 4px; cursor: pointer; }
+
+  .row-head{
+    display:grid; grid-template-columns: 84px 1fr auto auto 20px;
+    align-items: center; gap: 16px;
+  }
+  @media (max-width: 640px){
+    .row-head{ grid-template-columns: 1fr auto; row-gap: 8px; }
+    .row-head .req-code, .row-head .row-dept{ display:none; }
+  }
+
+  .req-code{ font-family: var(--mono); font-size: 12px; color: var(--paper-dim); }
+  .row-title-wrap{ min-width: 0; }
+  .row-title{
+    font-family: var(--display); font-weight: 500; font-size: 18px; margin: 0;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .row-sub{ font-size: 13px; color: var(--paper-dim); margin-top: 2px; }
+  .row-dept{
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--teal); white-space: nowrap;
+  }
+
+  .status-pill{
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 5px 10px; border-radius: 4px;
+    white-space: nowrap; display: inline-block;
+    opacity: 0; transform: translateY(-6px); animation: flap 0.4s ease forwards;
+  }
+  .status-pill.open{ background: rgba(232,163,61,0.14); color: var(--amber); border: 1px solid var(--amber-dim); }
+  .status-pill.closed{ background: rgba(107,114,128,0.14); color: var(--slate); border: 1px solid #3a3f47; }
+
+  @keyframes flap{
+    0%{ opacity: 0; transform: translateY(-6px); }
+    60%{ opacity: 1; transform: translateY(1px); }
+    100%{ opacity: 1; transform: translateY(0); }
+  }
+
+  .chevron{ font-size: 13px; color: var(--paper-dim); transition: transform .2s ease; justify-self: end; }
+  .row.expanded .chevron{ transform: rotate(90deg); color: var(--amber); }
+
+  .row-detail{ max-height: 0; overflow: hidden; transition: max-height .28s ease; }
+  .row.expanded .row-detail{ max-height: 800px; }
+  .row-detail-inner{ padding: 18px 4px 4px; display: grid; gap: 14px; }
+
+  .detail-block h4{
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--paper-dim); margin: 0 0 6px; font-weight: 500;
+  }
+  .detail-block p, .detail-block li{ font-size: 14px; line-height: 1.6; color: var(--paper); margin: 0; }
+  .detail-block ul{ margin: 0; padding-left: 18px; }
+
+  .tags{ display:flex; gap: 8px; flex-wrap: wrap; }
+  .tag{
+    font-family: var(--mono); font-size: 11px; color: var(--paper-dim);
+    border: 1px solid var(--line); padding: 3px 9px; border-radius: 999px;
+  }
+
+  .apply-btn{
+    justify-self: start; margin-top: 4px; font-family: var(--body); font-weight: 600;
+    font-size: 14px; background: var(--amber); color: var(--ink); border: none;
+    padding: 11px 20px; border-radius: 6px; text-decoration: none;
+    display: inline-block; transition: filter .15s ease;
+  }
+  .apply-btn:hover{ filter: brightness(1.08); }
+  .apply-btn:focus-visible{ outline: 2px solid var(--paper); outline-offset: 2px; }
+  .apply-btn.disabled{
+    background: transparent; border: 1px solid var(--line); color: var(--paper-dim); pointer-events: none;
+  }
+
+  .empty-state{ padding: 60px 4px; text-align: center; color: var(--paper-dim); }
+  .empty-state p{ font-family: var(--mono); font-size: 13px; }
+
+  footer{
+    margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--line);
+    font-family: var(--mono); font-size: 12px; color: var(--paper-dim);
+    display:flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+  }
+  footer a{ color: var(--paper-dim); text-decoration: underline; text-underline-offset: 3px; }
+  footer a:hover{ color: var(--paper); }
+
+  @media (prefers-reduced-motion: reduce){
+    .status-pill{ animation: none; opacity: 1; transform: none; }
+    .row-detail{ transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="board-header">
+    <p class="eyebrow">Now hiring — onsite</p>
+    <h1 class="org-name">Jenny Consultings</h1>
+    <p class="tagline">Physical Therapist openings across California and Georgia. Agency-placed, onsite roles — full details inside each listing.</p>
+    <div class="meta-row">
+      <span>Positions open: <b id="openCount">–</b></span>
+      <span>Last updated: <b id="lastUpdated">–</b></span>
+    </div>
+  </header>
+
+  <div class="filters" id="filters"></div>
+
+  <div class="board" id="board"></div>
+
+  <footer>
+    <span>© <span id="year"></span> Jenny Consultings</span>
+    <a href="mailto:careers@jennyconsultings.com">careers@jennyconsultings.com</a>
+  </footer>
+
+</div>
+
+<script>
+/* ================================================================
+   VACANCIES — EDIT THIS LIST
+   ================================================================
+   Add a role: copy one whole { ... } block, paste before the
+   closing "];", edit the values.
+
+   Close a role: change  status: "open"  to  "closed"  (stays on
+   the page, greyed out).
+
+   "department" is used for the state filter tabs — keep it as
+   "California" or "Georgia" (or add a new state and it gets its
+   own tab automatically).
+   ================================================================ */
+
+  const VACANCIES = [
+    {
+      id: "PT-101",
+      title: "Physical Therapist",
+      department: "California",
+      location: "Twentynine Palms, CA",
+      type: "Full-time / Part-time",
+      status: "open",
+      summary: "Hi Desert outpatient practice, team-based care with OT and speech",
+      description: "A relationship-driven Hi Desert practice where physical therapy works side by side with speech and occupational therapy, so complex patients are managed as a team. The approach is hands-on and individualized, with roughly fourteen patients per day and full one-hour evaluations. Caseload spans orthopedics, sports and surgical rehab, joint replacements, geriatrics, chronic pain, and neurologic and vestibular conditions.",
+      requirements: [
+        "Active California PT license or license-eligible — new grads welcome",
+        "Not a fit for candidates whose experience is primarily 10+ years in a SNF setting",
+        "Comfortable with a broad orthopedic/neuro/geriatric caseload"
+      ],
+      schedule: "7 days/week, 7:30 AM–5:00 PM (Fridays until 4:00 PM). Part-time welcome.",
+      pay: "$42–$55/hour, plus sign-on bonus and relocation reimbursement (discussed during compensation conversation)",
+      benefits: [
+        "Health premiums employer-paid: 90% HMO, 80% PPO, 80% HSA plan",
+        "Dental and vision covered at 100%",
+        "120 hours PTO/year + 7 paid holidays",
+        "$1,000/year continuing education reimbursement",
+        "401(k) with 4% total employer contribution"
+      ],
+      applyLink: "mailto:careers@jennyconsultings.com?subject=Application: PT-101 Physical Therapist, Twentynine Palms CA"
+    },
+    {
+      id: "PT-102",
+      title: "Physical Therapist",
+      department: "California",
+      location: "Bakersfield, CA",
+      type: "Full-time",
+      status: "open",
+      summary: "Outpatient ortho clinic, mentorship for early-career clinicians",
+      description: "A busy outpatient orthopedic clinic in Bakersfield with a strong mentorship culture for clinicians early in their career, alongside experienced staff for complex cases. Typical caseload is post-surgical ortho, sports injuries, and general musculoskeletal rehab, with one-on-one patient time built into the schedule.",
+      requirements: [
+        "Active California PT license or license-eligible — new grads welcome",
+        "Interest in orthopedic and sports rehab",
+        "Willingness to participate in a structured mentorship track"
+      ],
+      schedule: "Monday–Friday, 8:00 AM–5:30 PM, with occasional early evening slots for patient demand.",
+      pay: "$40–$52/hour, sign-on bonus available",
+      benefits: [
+        "Medical, dental, and vision coverage with employer contribution",
+        "80 hours PTO/year plus paid holidays",
+        "Continuing education stipend and paid mentorship hours",
+        "401(k) with employer match"
+      ],
+      applyLink: "mailto:careers@jennyconsultings.com?subject=Application: PT-102 Physical Therapist, Bakersfield CA"
+    },
+    {
+      id: "PT-103",
+      title: "Physical Therapist",
+      department: "California",
+      location: "Fresno, CA",
+      type: "Full-time",
+      status: "open",
+      summary: "Multi-disciplinary rehab center, ortho and neuro caseload",
+      description: "A multi-disciplinary rehab center in Fresno serving a mixed caseload of orthopedic post-surgical patients and neurologic conditions including stroke recovery and vestibular disorders. Clinicians work alongside OT and speech-language pathology on shared cases.",
+      requirements: [
+        "Active California PT license or license-eligible",
+        "Experience or strong interest in neurologic rehab a plus",
+        "Comfortable collaborating in a multi-disciplinary team setting"
+      ],
+      schedule: "Monday–Saturday rotation, 7:30 AM–5:00 PM, with every third Saturday required.",
+      pay: "$44–$56/hour",
+      benefits: [
+        "Health premiums largely employer-paid (HMO/PPO/HSA options)",
+        "Dental and vision included",
+        "100 hours PTO/year plus paid holidays",
+        "Continuing education reimbursement",
+        "401(k) with employer contribution"
+      ],
+      applyLink: "mailto:careers@jennyconsultings.com?subject=Application: PT-103 Physical Therapist, Fresno CA"
+    },
+    {
+      id: "PT-104",
+      title: "Physical Therapist",
+      department: "Georgia",
+      location: "Savannah, GA",
+      type: "Full-time",
+      status: "open",
+      summary: "Coastal outpatient clinic, ortho and sports medicine focus",
+      description: "An outpatient clinic in Savannah with a sports medicine and orthopedic focus, treating a mix of weekend-athlete injuries, post-surgical rehab, and general orthopedic conditions. Full one-hour evaluation slots and roughly twelve to fourteen patients per day.",
+      requirements: [
+        "Active Georgia PT license or license-eligible — new grads welcome",
+        "Interest in sports medicine and orthopedic rehab",
+        "Not a fit for candidates whose background is primarily long-term SNF care"
+      ],
+      schedule: "Monday–Friday, 7:30 AM–5:30 PM. Part-time schedules considered.",
+      pay: "$40–$53/hour, relocation assistance available",
+      benefits: [
+        "Employer-subsidized medical, dental, and vision",
+        "110 hours PTO/year plus paid holidays",
+        "$1,000/year continuing education reimbursement",
+        "401(k) with employer match"
+      ],
+      applyLink: "mailto:careers@jennyconsultings.com?subject=Application: PT-104 Physical Therapist, Savannah GA"
+    },
+    {
+      id: "PT-105",
+      title: "Physical Therapist",
+      department: "Georgia",
+      location: "Macon, GA",
+      type: "Full-time / Part-time",
+      status: "open",
+      summary: "Community outpatient practice, broad general caseload",
+      description: "A community-based outpatient practice in Macon treating a broad general caseload — orthopedics, geriatrics, chronic pain, and post-surgical patients. A steady, moderate patient load with individualized treatment plans and a collaborative front-desk-to-clinician workflow.",
+      requirements: [
+        "Active Georgia PT license or license-eligible — new grads welcome",
+        "Comfortable with a generalist outpatient caseload",
+        "Strong communication skills for patient education"
+      ],
+      schedule: "Monday–Friday, 8:00 AM–5:00 PM. Part-time welcome.",
+      pay: "$38–$50/hour",
+      benefits: [
+        "Health, dental, and vision plans with employer contribution",
+        "90 hours PTO/year plus paid holidays",
+        "Continuing education reimbursement",
+        "401(k) available after eligibility period"
+      ],
+      applyLink: "mailto:careers@jennyconsultings.com?subject=Application: PT-105 Physical Therapist, Macon GA"
+    },
+    {
+      id: "PT-106",
+      title: "Physical Therapist",
+      department: "Georgia",
+      location: "Augusta, GA",
+      type: "Full-time",
+      status: "open",
+      summary: "Outpatient ortho and post-surgical caseload, growing practice",
+      description: "A growing outpatient practice in Augusta with a primarily orthopedic and post-surgical caseload, including joint replacements and sports injuries. Clinicians get dedicated one-on-one time with patients and support from PT aides during peak hours.",
+      requirements: [
+        "Active Georgia PT license or license-eligible — new grads welcome",
+        "Interest in orthopedic and post-surgical rehab",
+        "Not a fit for candidates whose experience is primarily 10+ years in a SNF setting"
+      ],
+      schedule: "Monday–Friday, 7:30 AM–5:00 PM. Occasional Saturday coverage on a rotating basis.",
+      pay: "$41–$54/hour, sign-on bonus discussed during compensation conversation",
+      benefits: [
+        "Health premiums largely employer-paid across HMO/PPO/HSA options",
+        "Dental and vision covered at 100%",
+        "100 hours PTO/year plus paid holidays",
+        "Continuing education reimbursement",
+        "401(k) with employer contribution"
+      ],
+      applyLink: "mailto:careers@jennyconsultings.com?subject=Application: PT-106 Physical Therapist, Augusta GA"
+    }
+  ];
+
+  /* ================================================================
+     RENDER LOGIC — no need to edit below this line
+     ================================================================ */
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+  document.getElementById('lastUpdated').textContent =
+    new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+
+  let activeFilter = 'All';
+
+  function departments(){
+    return ['All', ...new Set(VACANCIES.map(v => v.department))];
+  }
+
+  function renderFilters(){
+    const el = document.getElementById('filters');
+    el.innerHTML = '';
+    departments().forEach(dept => {
+      const btn = document.createElement('button');
+      btn.className = 'filter-btn' + (dept === activeFilter ? ' active' : '');
+      btn.textContent = dept;
+      btn.setAttribute('aria-pressed', dept === activeFilter);
+      btn.addEventListener('click', () => {
+        activeFilter = dept;
+        renderFilters();
+        renderBoard();
+      });
+      el.appendChild(btn);
+    });
+  }
+
+  function escapeHtml(str){
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  function renderBoard(){
+    const board = document.getElementById('board');
+    board.innerHTML = '';
+
+    const visible = VACANCIES.filter(v => activeFilter === 'All' || v.department === activeFilter);
+
+    document.getElementById('openCount').textContent =
+      VACANCIES.filter(v => v.status === 'open').length;
+
+    if (visible.length === 0){
+      board.innerHTML = '<div class="empty-state"><p>No roles in this state right now — check back soon.</p></div>';
+      return;
+    }
+
+    visible.forEach((v, i) => {
+      const row = document.createElement('div');
+      row.className = 'row';
+
+      const applyHtml = v.applyLink
+        ? `<a class="apply-btn" href="${escapeHtml(v.applyLink)}">Apply for this role</a>`
+        : `<span class="apply-btn disabled">Applications closed</span>`;
+
+      row.innerHTML = `
+        <div class="row-head">
+          <span class="req-code">${escapeHtml(v.id)}</span>
+          <div class="row-title-wrap">
+            <p class="row-title">${escapeHtml(v.title)}</p>
+            <p class="row-sub">${escapeHtml(v.location)} · ${escapeHtml(v.type)}</p>
+          </div>
+          <span class="row-dept">${escapeHtml(v.department)}</span>
+          <span class="status-pill ${v.status}" style="animation-delay:${i * 0.05}s">${v.status}</span>
+          <span class="chevron">▸</span>
+        </div>
+        <div class="row-detail">
+          <div class="row-detail-inner">
+            <div class="detail-block">
+              <h4>About the role</h4>
+              <p>${escapeHtml(v.description)}</p>
+            </div>
+            <div class="detail-block">
+              <h4>What we're looking for</h4>
+              <ul>${v.requirements.map(r => `<li>${escapeHtml(r)}</li>`).join('')}</ul>
+            </div>
+            <div class="detail-block">
+              <h4>Schedule</h4>
+              <p>${escapeHtml(v.schedule)}</p>
+            </div>
+            <div class="detail-block">
+              <h4>Compensation</h4>
+              <p>${escapeHtml(v.pay)}</p>
+            </div>
+            <div class="detail-block">
+              <h4>Benefits</h4>
+              <ul>${v.benefits.map(b => `<li>${escapeHtml(b)}</li>`).join('')}</ul>
+            </div>
+            <div class="tags">
+              <span class="tag">${escapeHtml(v.location)}</span>
+              <span class="tag">${escapeHtml(v.type)}</span>
+            </div>
+            ${applyHtml}
+          </div>
+        </div>
+      `;
+
+      row.querySelector('.row-head').addEventListener('click', () => {
+        row.classList.toggle('expanded');
+      });
+
+      board.appendChild(row);
+    });
+  }
+
+  renderFilters();
+  renderBoard();
+</script>
+
+</body>
+</html>
